@@ -48,19 +48,7 @@ describe('most blogs', () => {
   })
 })
 
-describe('/api/blogs', () => {
-  test('GET request returns all blogs', async () => {
-    const response = await api.get('/api/blogs')
-    const contents = response.body.map(b => b.title)
-    expect(contents.length).toEqual(helper.initialBlogs.length)
-  })
-
-  test('unique identifier is labeled id', async () => {
-    const response = await api.get('/api/blogs')
-    const blog = response.body[0]
-    expect(blog.id).toBeDefined()
-  })
-
+describe('addition of a new blog', () => {
   test('post request saves blog to database', async () => {
     const newBlog = { 
       title: "Testing post method", 
@@ -115,6 +103,55 @@ describe('/api/blogs', () => {
   })
 })
 
+describe('viewing blogs', () => {
+  test('GET request returns all blogs', async () => {
+    const response = await api.get('/api/blogs')
+    const contents = response.body.map(b => b.title)
+    expect(contents.length).toEqual(helper.initialBlogs.length)
+  })
+
+  test('unique identifier is labeled id', async () => {
+    const response = await api.get('/api/blogs')
+    const blog = response.body[0]
+    expect(blog.id).toBeDefined()
+  })
+})
+
+describe('when multiple blogs are in the database', () => {
+  test('delete a single blog post', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+
+    const titles = blogsAtEnd.map(r => r.title)
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+
+  test('update likes for a blog post', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    blogToUpdate.likes = blogToUpdate.likes + 20
+
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+
+
+    const blogAtEnd = await Blog.findById(blogToUpdate.id)
+    expect(blogAtEnd.likes).toEqual(blogToUpdate.likes)
+  })
+
+})
 
 // describe('most likes', () => {
 //   test('returns number of likes of author with most likes', () => {
