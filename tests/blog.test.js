@@ -98,8 +98,8 @@ describe('addition of a new blog', () => {
       .expect(400)
 
     await api.post('/api/blogs')
-    .send(noUrl)
-    .expect(400)
+      .send(noUrl)
+      .expect(400)
   })
 })
 
@@ -150,8 +150,8 @@ describe('when multiple blogs are in the database', () => {
     const blogAtEnd = await Blog.findById(blogToUpdate.id)
     expect(blogAtEnd.likes).toEqual(blogToUpdate.likes)
   })
-
 })
+
 
 // describe('most likes', () => {
 //   test('returns number of likes of author with most likes', () => {
