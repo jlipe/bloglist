@@ -7,7 +7,9 @@ const initialBlogs = [
     title: "React patterns", 
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
-    likes: 7, __v: 0 
+    likes: 7, 
+    __v: 0,
+    user: "60203acf4dc4d1085e32edb8"
   }, 
   { 
     _id: "5a422aa71b54a676234d17f8",
@@ -61,6 +63,12 @@ const initialUsers = [
     username: "RockyB",
     name:"asgdag",
     passwordHash:"$2b$10$AvQ3OE77GTRk1R86jefT9OepFD7utfxyo6.wdAMWV.KRptMaVA6N2",
+    __v: 0
+  },
+  {
+    _id: "60203acf4dc4d1085e32edb8",
+    username: "test_user",
+    passwordHash: "$2b$10$YKQPGse7PCZOjZ7dL15Z0.9f8wVyRyQrsaEJP8WpeWSrd5ixWdvdO",
     __v: 0
   }
 ]

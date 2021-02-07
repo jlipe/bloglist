@@ -1,6 +1,7 @@
 const listHelper = require('../utils/list_helper')
 const supertest = require('supertest')
 const app = require('../app')
+const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
@@ -8,14 +9,27 @@ const { test, expect } = require('@jest/globals')
 
 const api = supertest(app)
 
+let token
 
 beforeEach(async () => {
+  supertest(app)
+  .post('/api/login')
+  .send({
+    "username": "test_user",
+    "password": "test_password"
+  })
+  .end((err, response) => {
+    token = response.body.token
+  })
+
   await Blog.deleteMany({})
 
   const blogObjects = helper.initialBlogs
     .map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
+
+
 })
 
 describe('total likes', () => {
@@ -49,7 +63,20 @@ describe('most blogs', () => {
 })
 
 describe('addition of a new blog', () => {
+  test('it should require authorization', async () => {
+    const newBlog = { 
+      title: "Testing post method", 
+      author: "James Lipe", 
+      url: "www.test.com", 
+      likes: 44
+    }
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+  })
+
   test('post request saves blog to database', async () => {
+    // This test has hardcoded admin as user
     const newBlog = { 
       title: "Testing post method", 
       author: "James Lipe", 
@@ -58,6 +85,7 @@ describe('addition of a new blog', () => {
     }
 
     await api.post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -76,6 +104,7 @@ describe('addition of a new blog', () => {
     }
 
     const response = await api.post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -94,10 +123,12 @@ describe('addition of a new blog', () => {
     }
 
     await api.post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(noTitle)
       .expect(400)
 
     await api.post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(noUrl)
       .expect(400)
   })
@@ -124,6 +155,7 @@ describe('when multiple blogs are in the database', () => {
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
