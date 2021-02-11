@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -79,9 +80,20 @@ const App = () => {
   const renderedBlogs = () => {
     return (
       <div>
-        {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+        <button onClick={sortBlogs}>Sort Blogs by Likes</button>
+        {blogs.map(blog => <Blog key={blog.id} blog={blog} onBlogRemove={handleBlogRemove} />)}
       </div>
     )
+  }
+
+  const sortBlogs = () => {
+    console.log('sorting')
+    const sortedBlogs = [...blogs]
+    sortedBlogs.sort(function (a, b) {
+      console.log(a.likes)
+      return b.likes - a.likes
+    })
+    setBlogs(sortedBlogs)
   }
 
   const logout = () => {
@@ -93,9 +105,21 @@ const App = () => {
     return
   }
 
+  const blogFormRef = useRef()
+
   const handleBlogCreate = (message, blogToAdd) => {
     setMessage(message)
-    const newBlogs = [...blogs, blogToAdd]
+    const newBlogs = blogs.concat(blogToAdd)
+    setBlogs(newBlogs)
+    blogFormRef.current.toggleVisibility()
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
+
+  const handleBlogRemove = (message, blogToRemoveId) => {
+    setMessage(message)
+    const newBlogs = blogs.filter(blog => blog.id !== blogToRemoveId)
     setBlogs(newBlogs)
     setTimeout(() => {
       setMessage(null)
@@ -115,7 +139,9 @@ const App = () => {
           {user.username} logged in
           <button onClick={() => logout()}>Logout</button>
         </p>
-        <BlogForm user={user} handleSubmit={handleBlogCreate} />
+        <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
+          <BlogForm user={user} handleSubmit={handleBlogCreate} />
+        </Togglable>
         <p></p>
         {renderedBlogs()}
       </div>
