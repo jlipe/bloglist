@@ -26,12 +26,11 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
     try {
       const user = await loginService.login({
         username, password,
@@ -44,8 +43,8 @@ const App = () => {
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
-    } catch(exception) {  
-      setMessage("Invalid login")
+    } catch(exception) {
+      setMessage('Invalid login')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -57,7 +56,7 @@ const App = () => {
       <h2>Log in to application</h2>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -66,7 +65,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -74,7 +73,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const renderedBlogs = () => {
@@ -99,7 +98,7 @@ const App = () => {
   const logout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
     setUser(null)
-    blogService.setToken("")
+    blogService.setToken('')
     setUsername('')
     setPassword('')
     return
@@ -128,24 +127,24 @@ const App = () => {
 
   return (
     <div>
-      {message ? 
-      <Notification message={message} />
-      : null}
+      {message ?
+        <Notification message={message} />
+        : null}
 
       { user ?
-      <div>
-        <h2>Blogs</h2>
-        <p>
-          {user.username} logged in
-          <button onClick={() => logout()}>Logout</button>
-        </p>
-        <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
-          <BlogForm user={user} handleSubmit={handleBlogCreate} />
-        </Togglable>
-        <p></p>
-        {renderedBlogs()}
-      </div>
-      : loginForm()}
+        <div>
+          <h2>Blogs</h2>
+          <p>
+            {user.username} logged in
+            <button onClick={() => logout()}>Logout</button>
+          </p>
+          <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
+            <BlogForm user={user} handleSubmit={handleBlogCreate} />
+          </Togglable>
+          <p></p>
+          {renderedBlogs()}
+        </div>
+        : loginForm()}
     </div>
   )
 }

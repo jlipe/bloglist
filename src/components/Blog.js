@@ -4,7 +4,6 @@ import blogService from '../services/blogs'
 const Blog = ({ blog, onBlogRemove }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -23,14 +22,14 @@ const Blog = ({ blog, onBlogRemove }) => {
   const addLike = () => {
     const updatedBlog = blog
     updatedBlog.likes++
-    
+
     blogService.update(updatedBlog, blog.id)
       .then(response => setLikes(response.likes))
   }
 
   const removeBlog = () => {
     blogService.remove(blog.id)
-      .then(response => {
+      .then(() => {
         const message = `${blog.title} successfully removed`
         onBlogRemove(message, blog.id)
       })
@@ -47,7 +46,7 @@ const Blog = ({ blog, onBlogRemove }) => {
         <p>Likes {likes} <button onClick={addLike}>Like</button></p>
         <p>{blog.user ? blog.user.username : null}</p>
         <button onClick={removeBlog}>delete</button>
-      </div>   
+      </div>
     </div>
   )
 }
