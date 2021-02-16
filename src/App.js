@@ -76,11 +76,15 @@ const App = () => {
     </form>
   )
 
+  const handleLikeClick = (blog) => {
+    blogService.update(blog, blog.id)
+  }
+
   const renderedBlogs = () => {
     return (
       <div>
         <button onClick={sortBlogs}>Sort Blogs by Likes</button>
-        {blogs.map(blog => <Blog key={blog.id} blog={blog} onBlogRemove={handleBlogRemove} />)}
+        {blogs.map(blog => <Blog key={blog.id} blog={blog} onBlogRemove={handleBlogRemove} updateLikes={handleLikeClick}/>)}
       </div>
     )
   }

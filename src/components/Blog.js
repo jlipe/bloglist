@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, onBlogRemove }) => {
+const Blog = ({ blog, onBlogRemove, updateLikes }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
   const blogStyle = {
@@ -19,12 +19,12 @@ const Blog = ({ blog, onBlogRemove }) => {
     return
   }
 
-  const addLike = () => {
+  const addLike = (event) => {
+    event.preventDefault()
     const updatedBlog = blog
     updatedBlog.likes++
-
-    blogService.update(updatedBlog, blog.id)
-      .then(response => setLikes(response.likes))
+    updateLikes(updatedBlog)
+    setLikes(updatedBlog.likes)
   }
 
   const removeBlog = () => {
@@ -37,13 +37,13 @@ const Blog = ({ blog, onBlogRemove }) => {
 
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <div>
-        {blog.title} {blog.author} <button onClick={toggleVisible}>{ detailsVisible ? 'hide': 'show' }</button>
+        {blog.title} {blog.author} <button className='toggleBlog' onClick={toggleVisible}>{ detailsVisible ? 'hide': 'show' }</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='blogUrlAndUser'>
         <p>{blog.url}</p>
-        <p>Likes {likes} <button onClick={addLike}>Like</button></p>
+        <p>Likes {likes} <button className="likeButton" onClick={addLike}>Like</button></p>
         <p>{blog.user ? blog.user.username : null}</p>
         <button onClick={removeBlog}>delete</button>
       </div>
