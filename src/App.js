@@ -83,7 +83,7 @@ const App = () => {
   const renderedBlogs = () => {
     return (
       <div>
-        <button onClick={sortBlogs}>Sort Blogs by Likes</button>
+        <button onClick={sortBlogs} id="sortBlogsByLikes">Sort Blogs by Likes</button>
         {blogs.map(blog => <Blog key={blog.id} blog={blog} onBlogRemove={handleBlogRemove} updateLikes={handleLikeClick}/>)}
       </div>
     )
@@ -110,7 +110,9 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const handleBlogCreate = (message, blogToAdd) => {
+  const handleBlogCreate = async (blog) => {
+    const blogToAdd = await blogService.create(blog)
+    const message = `a new blog ${blogToAdd.title} by ${blogToAdd.author} added`
     setMessage(message)
     const newBlogs = blogs.concat(blogToAdd)
     setBlogs(newBlogs)
@@ -146,7 +148,9 @@ const App = () => {
             <BlogForm user={user} handleSubmit={handleBlogCreate} />
           </Togglable>
           <p></p>
-          {renderedBlogs()}
+          <div id="blogList">
+            {renderedBlogs()}
+          </div>
         </div>
         : loginForm()}
     </div>

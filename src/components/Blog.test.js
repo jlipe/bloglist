@@ -42,7 +42,7 @@ describe('<Blog />', () => {
     expect(urlAndUser).toHaveTextContent('http://www.myblogtest.com')
   })
 
-  test('like button', () => {
+  test('like button pressed twice', () => {
     const blog = {
       title: 'Blog to test',
       author: 'James Lipe',
