@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, onBlogRemove, updateLikes }) => {
+import { vote, deleteBlog } from '../reducers/blogReducer'
+import { setMessage } from '../reducers/notificationReducer'
+
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
+
   const [detailsVisible, setDetailsVisible] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,18 +26,12 @@ const Blog = ({ blog, onBlogRemove, updateLikes }) => {
 
   const addLike = (event) => {
     event.preventDefault()
-    const updatedBlog = blog
-    updatedBlog.likes++
-    updateLikes(updatedBlog)
-    setLikes(updatedBlog.likes)
+    dispatch(vote(blog))
   }
 
-  const removeBlog = () => {
-    blogService.remove(blog.id)
-      .then(() => {
-        const message = `${blog.title} successfully removed`
-        onBlogRemove(message, blog.id)
-      })
+  const removeBlog = (event) => {
+    event.preventDefault()
+    dispatch(deleteBlog(blog)).then(response => dispatch(setMessage(`${response.title} successfully removed`, 3)))
   }
 
 
@@ -43,7 +42,7 @@ const Blog = ({ blog, onBlogRemove, updateLikes }) => {
       </div>
       <div style={showWhenVisible} className='blogUrlAndUser'>
         <p>{blog.url}</p>
-        <p>Likes <span id="likes">{likes}</span> <button className="likeButton" onClick={addLike} id="likeButton">Like</button></p>
+        <p>Likes <span id="likes">{blog.likes}</span> <button className="likeButton" onClick={addLike} id="likeButton">Like</button></p>
         <p>{blog.user ? blog.user.username : null}</p>
         <button onClick={removeBlog} id="delete">delete</button>
       </div>

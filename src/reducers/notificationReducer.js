@@ -1,4 +1,6 @@
 const reducer = (state = '', action) => {
+  console.log('Action: ', action)
+  console.log('State: ', state)
   switch(action.type) {
   case('SET_MESSAGE'):
     return action.data.message
