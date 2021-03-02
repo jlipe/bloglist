@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { setMessage } from './reducers/notificationReducer'
+
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
@@ -8,11 +12,12 @@ import loginService from './services/login'
 import './App.css'
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -40,14 +45,12 @@ const App = () => {
         'loggedBlogAppUser', JSON.stringify(user)
       )
       setUser(user)
+      dispatch(setMessage(`${username} logged in`, 3))
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
     } catch(exception) {
-      setMessage('Invalid login')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(setMessage('Invalid login', 3))
     }
   }
 
@@ -100,6 +103,7 @@ const App = () => {
   }
 
   const logout = () => {
+    dispatch(setMessage(`${user.username} logged out`, 3))
     window.localStorage.removeItem('loggedBlogAppUser')
     setUser(null)
     blogService.setToken('')
@@ -113,30 +117,23 @@ const App = () => {
   const handleBlogCreate = async (blog) => {
     const blogToAdd = await blogService.create(blog)
     const message = `a new blog ${blogToAdd.title} by ${blogToAdd.author} added`
-    setMessage(message)
+    console.log('here')
+
+    dispatch(setMessage(message, 3))
     const newBlogs = blogs.concat(blogToAdd)
     setBlogs(newBlogs)
     blogFormRef.current.toggleVisibility()
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
   }
 
   const handleBlogRemove = (message, blogToRemoveId) => {
-    setMessage(message)
+    dispatch(setMessage(message, 3))
     const newBlogs = blogs.filter(blog => blog.id !== blogToRemoveId)
     setBlogs(newBlogs)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
   }
 
   return (
     <div>
-      {message ?
-        <Notification message={message} />
-        : null}
-
+      <Notification />
       { user ?
         <div>
           <h2>Blogs</h2>
