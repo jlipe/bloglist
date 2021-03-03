@@ -56,12 +56,12 @@ export const logoutUser = () => {
 
 export const initUser = () => {
   return async dispatch => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
+    const loggedUserJSON = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
     if (loggedUserJSON) {
       blogService.setToken(loggedUserJSON.token)
       dispatch({
         type: 'INIT_USER',
-        data: { user: JSON.parse(loggedUserJSON) }
+        data: { user: loggedUserJSON }
       })
     }
   }

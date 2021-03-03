@@ -1,5 +1,7 @@
 import blogService from '../services/blogs'
 
+import { setMessage } from './notificationReducer'
+
 const reducer = (state = [], action) => {
   console.log('Action: ', action)
   console.log('State: ', state)
@@ -48,17 +50,17 @@ export const createBlog = (blog) => {
       data: { blog: addedBlog }
     })
 
-    return addedBlog
+    dispatch(setMessage(`a new blog ${addedBlog.title} by ${addedBlog.author} added`, 3))
   }
 }
 
 export const vote = (blog) => {
   blog.likes++
   return async dispatch => {
-    const changedBlog = await blogService.update(blog)
+    await blogService.update(blog)
     dispatch({
       type: 'UPDATE_BLOG',
-      data: { blog: changedBlog }
+      data: { blog }
     })
   }
 }
@@ -71,7 +73,7 @@ export const deleteBlog = (blog) => {
       data: { id: blog.id }
     })
 
-    return blog
+    dispatch(setMessage(`${blog.title} successfully removed`, 3))
   }
 }
 

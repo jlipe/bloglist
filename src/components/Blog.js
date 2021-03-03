@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { vote, deleteBlog } from '../reducers/blogReducer'
-import { setMessage } from '../reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -24,16 +23,6 @@ const Blog = ({ blog }) => {
     return
   }
 
-  const addLike = (event) => {
-    event.preventDefault()
-    dispatch(vote(blog))
-  }
-
-  const removeBlog = (event) => {
-    event.preventDefault()
-    dispatch(deleteBlog(blog)).then(response => dispatch(setMessage(`${response.title} successfully removed`, 3)))
-  }
-
 
   return (
     <div style={blogStyle} className='blog'>
@@ -42,9 +31,9 @@ const Blog = ({ blog }) => {
       </div>
       <div style={showWhenVisible} className='blogUrlAndUser'>
         <p>{blog.url}</p>
-        <p>Likes <span id="likes">{blog.likes}</span> <button className="likeButton" onClick={addLike} id="likeButton">Like</button></p>
+        <p>Likes <span id="likes">{blog.likes}</span> <button className="likeButton" onClick={() => dispatch(vote(blog))} id="likeButton">Like</button></p>
         <p>{blog.user ? blog.user.username : null}</p>
-        <button onClick={removeBlog} id="delete">delete</button>
+        <button onClick={() => dispatch(deleteBlog(blog))} id="delete">delete</button>
       </div>
     </div>
   )
