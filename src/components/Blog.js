@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { vote, deleteBlog } from '../reducers/blogReducer'
 
@@ -27,7 +28,9 @@ const Blog = ({ blog }) => {
   return (
     <div style={blogStyle} className='blog'>
       <div>
-        {blog.title} {blog.author} <button className='toggleBlog' onClick={toggleVisible}>{ detailsVisible ? 'hide': 'show' }</button>
+        <Link to={`/users/${blog.user.id}`}>
+          {blog.title} {blog.author} <button className='toggleBlog' onClick={toggleVisible}>{ detailsVisible ? 'hide': 'show' }</button>
+        </Link>
       </div>
       <div style={showWhenVisible} className='blogUrlAndUser'>
         <p>{blog.url}</p>

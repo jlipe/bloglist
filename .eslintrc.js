@@ -6,8 +6,7 @@ module.exports = {
       "cypress/globals": true
   },
   "extends": [ 
-      "eslint:recommended",
-      "plugin:react/recommended"
+        "plugin:react/recommended"
   ],
   "parserOptions": {
       "ecmaFeatures": {
