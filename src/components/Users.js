@@ -1,7 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
-const Users = ({ blogs }) => {
+
+const User = ({ blogs }) => {
   const userCount = {}
   for (let blog of blogs) {
     if (blog.user.username in userCount) {
@@ -29,4 +29,4 @@ const Users = ({ blogs }) => {
   )
 }
 
-export default Users
+export default User

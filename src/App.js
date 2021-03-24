@@ -14,6 +14,8 @@ import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
+import User from './components/User'
+import Blog from './components/Blog'
 
 import './App.css'
 
@@ -54,8 +56,14 @@ const App = () => {
           </div>
           : <LoginForm /> }
         <Switch>
+          <Route path="/users/:id">
+            <User blogs={blogs} />
+          </Route>
           <Route path="/users">
             <Users blogs={blogs} />
+          </Route>
+          <Route path="/blogs/:id">
+            <Blog blogs={blogs} />
           </Route>
           <Route path="/">
             {user ?
