@@ -12,6 +12,8 @@ const reducer = (state = [], action) => {
     return state.slice().sort(function (a, b) {
       return b.likes - a.likes
     })
+  case('ADD_COMMENT'):
+    return state.map(blog => blog.id === action.data.id ? blog.comments = blog.comments.concat(action.data.comment) : blog)
   case('ADD_BLOG'):
     return [...state, action.data.blog]
   case('UPDATE_BLOG'): {
@@ -74,6 +76,16 @@ export const deleteBlog = (blog) => {
     })
 
     dispatch(setMessage(`${blog.title} successfully removed`, 3))
+  }
+}
+
+export const addComment = (blog, comment) => {
+  return async dispatch => {
+    const updatedBlog = await blogService.addComment(comment, blog.id)
+    dispatch({
+      type: 'UPDATE_BLOG',
+      data: { blog: updatedBlog }
+    })
   }
 }
 

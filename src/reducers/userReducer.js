@@ -36,8 +36,10 @@ export const loginUser = (username, password) => {
         type: 'SET_USER',
         data: { user }
       })
+
     } catch(exception) {
       dispatch(setMessage('Invalid login', 3))
+      return Promise.reject('Invalid Login')
     }
   }
 }

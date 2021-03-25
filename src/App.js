@@ -16,6 +16,7 @@ import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import User from './components/User'
 import Blog from './components/Blog'
+import Navbar from './components/Navbar'
 
 import './App.css'
 
@@ -45,16 +46,9 @@ const App = () => {
   return (
     <div>
       <Router>
+        <Navbar user={user} />
         <Notification />
         <h2>Blogs</h2>
-        { user ?
-          <div>
-            <p>
-              {user.username} logged in
-              <button onClick={() => dispatch(logoutUser())}>Logout</button>
-            </p>
-          </div>
-          : <LoginForm /> }
         <Switch>
           <Route path="/users/:id">
             <User blogs={blogs} />
@@ -65,15 +59,19 @@ const App = () => {
           <Route path="/blogs/:id">
             <Blog blogs={blogs} />
           </Route>
+          <Route path="/login">
+            <LoginForm />
+          </Route>
           <Route path="/">
-            {user ?
-              <div>
+            <div>
+              {user ?
                 <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
                   <BlogForm user={user} handleSubmit={handleBlogCreate} />
                 </Togglable>
-                <BlogList blogs={blogs} />
-              </div>
-              : null}
+                : null
+              }
+              <BlogList blogs={blogs} />
+            </div>
           </Route>
         </Switch>
       </Router>

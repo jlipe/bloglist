@@ -4,8 +4,11 @@ import { useDispatch } from 'react-redux'
 import { useField } from '../hooks'
 import { loginUser } from '../reducers/userReducer'
 
+import { useHistory } from 'react-router-dom'
+
 const loginForm = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const username = useField('text')
   const password = useField('password')
@@ -13,6 +16,8 @@ const loginForm = () => {
   const submitForm = (event) => {
     event.preventDefault()
     dispatch(loginUser(username.value, password.value))
+      .then(() => history.push('/'))
+      .catch(() => console.log('invalid login'))
   }
 
   return (
