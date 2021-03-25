@@ -1,7 +1,9 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { sortBlogs, deleteBlog } from '../reducers/blogReducer'
 import { Link } from 'react-router-dom'
+
+import { ListGroup, Button, Table } from 'react-bootstrap'
 
 const BlogList = ({ blogs }) => {
   const dispatch = useDispatch()
@@ -14,25 +16,40 @@ const BlogList = ({ blogs }) => {
     marginBottom: 5
   }
 
-  console.log(blogs)
-
   const renderedBlogs = blogs.map(blog => {
     return(
-      <div style={blogStyle} className='blog' key={blog.id}>
-        <div>
+      <tr key={blog.id}>
+        <td>
           <Link to={`/blogs/${blog.id}`}>
-            {blog.title} {blog.author}
+            {blog.title}
           </Link>
-          <button onClick={() => dispatch(deleteBlog(blog))} id="delete">delete</button>
-        </div>
-      </div>
+        </td>
+        <td>
+          {blog.author}
+        </td>
+        <td>
+          <Button className="ml-2" variant="danger" onClick={() => dispatch(deleteBlog(blog))} id="delete">delete</Button>
+        </td>
+      </tr>
     )
   })
 
   return (
     <div>
-      <button onClick={() => dispatch(sortBlogs())}>Sort Blogs</button>
-      {renderedBlogs}
+      <Button className="m-2" onClick={() => dispatch(sortBlogs())}>Sort Blogs</Button>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {renderedBlogs}
+        </tbody>
+      </Table>
+
     </div>
   )
 }

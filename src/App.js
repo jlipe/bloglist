@@ -16,7 +16,7 @@ import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import User from './components/User'
 import Blog from './components/Blog'
-import Navbar from './components/Navbar'
+import BlogNav from './components/BlogNav'
 
 import './App.css'
 
@@ -44,9 +44,9 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <Router>
-        <Navbar user={user} />
+        <BlogNav user={user} />
         <Notification />
         <h2>Blogs</h2>
         <Switch>

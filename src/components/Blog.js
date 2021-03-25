@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom'
 
 import { vote, addComment } from '../reducers/blogReducer'
 
+import { Button, Form, ListGroup } from 'react-bootstrap'
+
 const Blog = ({ blogs }) => {
   const dispatch = useDispatch()
   const id = useParams().id
@@ -24,9 +26,9 @@ const Blog = ({ blogs }) => {
   const comments = blog.comments
   const renderedComments = comments.map((comment, index) => {
     return (
-      <li key={index}>
+      <ListGroup.Item key={index}>
         {comment}
-      </li>
+      </ListGroup.Item>
     )
   })
 
@@ -34,17 +36,23 @@ const Blog = ({ blogs }) => {
     <div>
       <h2><em>{blog.title}</em></h2>
       <a href={blog.url} >{blog.url}</a>
-      <p>Likes <span id="likes">{blog.likes}</span> <button className="likeButton" onClick={() => dispatch(vote(blog))} id="likeButton">Like</button></p>
+      <p className="mt-2">
+        Likes <span id="likes">{blog.likes}</span>{'  '}
+        <Button type="button" className="likeButton" size="sm" variant="outline-secondary" onClick={() => dispatch(vote(blog))} id="likeButton">Like</Button>
+      </p>
       <p>Added by {blog.user ? blog.user.username : null}</p>
       <h3>Comments</h3>
-      <form onSubmit={submitComment}>
-        <input value={newComment} onChange={(event) => setNewComment(event.target.value)} ></input>
-        <button type="submit">Add Comment</button>
-      </form>
-
-      <ul>
+      <Form inline onSubmit={submitComment}>
+        <Form.Control
+          className="mb-2 mr-sm-2 col-5"
+          value={newComment}
+          onChange={(event) => setNewComment(event.target.value)}
+        />
+        <Button type="submit" className="mb-2">Add Comment</Button>
+      </Form>
+      <ListGroup className="mb-2 mr-sm-2 col-5" variant="flush">
         {renderedComments}
-      </ul>
+      </ListGroup>
     </div>
   )
 }
