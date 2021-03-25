@@ -17,6 +17,7 @@ import BlogForm from './components/BlogForm'
 import User from './components/User'
 import Blog from './components/Blog'
 import BlogNav from './components/BlogNav'
+import SignUp from './components/SignUp'
 
 import './App.css'
 
@@ -58,6 +59,9 @@ const App = () => {
           </Route>
           <Route path="/blogs/:id">
             <Blog blogs={blogs} />
+          </Route>
+          <Route path="/signup">
+            <SignUp />
           </Route>
           <Route path="/login">
             <LoginForm />

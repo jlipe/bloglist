@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import userService from '../services/users'
 
 import { setMessage } from './notificationReducer'
 
@@ -65,6 +66,24 @@ export const initUser = () => {
         type: 'INIT_USER',
         data: { user: loggedUserJSON }
       })
+    }
+  }
+}
+
+export const addUser = (username, password) => {
+  return async dispatch => {
+    try {
+      const user = await userService.addUser({
+        username, password
+      })
+
+      console.log(user)
+
+      dispatch(setMessage(`${user.username} successfully added`, 3))
+
+    } catch(exception) {
+      dispatch(setMessage('Invalid login', 3))
+      return Promise.reject('Invalid Login')
     }
   }
 }
