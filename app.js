@@ -30,8 +30,9 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build/index.html"));
-})
+  let url = path.join(__dirname, '/build', 'index.html');
+  res.sendFile(url);
+});
 
 
 if (process.env.NODE_ENV === 'test') {
