@@ -9,6 +9,7 @@ const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
+const path = require('path')
 
 logger.info('connecting to', config.MONGODB_URI)
 
