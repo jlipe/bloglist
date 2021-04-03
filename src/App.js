@@ -24,6 +24,10 @@ import SignUp from './components/SignUp'
 import './App.css'
 
 const App = () => {
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  } else {
+    console.log = function(){}
+  }
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => state.blogs)
