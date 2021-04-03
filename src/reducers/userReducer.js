@@ -31,7 +31,7 @@ export const loginUser = (username, password) => {
       )
 
       blogService.setToken(user.token)
-      dispatch(setMessage(`${user.username} logged in`, 3))
+      dispatch(setMessage(`${user.username} logged in`, 'success', 3))
 
       dispatch({
         type: 'SET_USER',
@@ -39,7 +39,7 @@ export const loginUser = (username, password) => {
       })
 
     } catch(exception) {
-      dispatch(setMessage('Invalid login', 3))
+      dispatch(setMessage('Invalid login', 'danger', 3))
       return Promise.reject('Invalid Login')
     }
   }
@@ -50,7 +50,7 @@ export const logoutUser = () => {
     const user = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
     window.localStorage.removeItem('loggedBlogAppUser')
     blogService.setToken('')
-    dispatch(setMessage(`${user.username} logged out`, 3))
+    dispatch(setMessage(`${user.username} logged out`, 'success', 3))
     dispatch({
       type: 'REMOVE_USER'
     })
@@ -59,6 +59,7 @@ export const logoutUser = () => {
 
 export const initUser = () => {
   return async dispatch => {
+
     const loggedUserJSON = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
     if (loggedUserJSON) {
       blogService.setToken(loggedUserJSON.token)
@@ -77,12 +78,10 @@ export const addUser = (username, password) => {
         username, password
       })
 
-      console.log(user)
-
-      dispatch(setMessage(`${user.username} successfully added`, 3))
+      dispatch(setMessage(`${user.username} successfully added`, 'success', 3))
 
     } catch(exception) {
-      dispatch(setMessage('Invalid login', 3))
+      dispatch(setMessage('Username already in use', 'danger', 3))
       return Promise.reject('Invalid Login')
     }
   }

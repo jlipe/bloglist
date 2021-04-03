@@ -6,15 +6,16 @@ import { Alert } from 'react-bootstrap'
 
 const Notification = () => {
   const message = useSelector(state => state.message)
-  if (message === '') {
-    return null
-  }
 
-  return (
-    <Alert variant="success">
-      {message}
-    </Alert>
-  )
+  if (message.message === '') {
+    return null
+  } else {
+    return (
+      <Alert variant={message.type}>
+        {message.message}
+      </Alert>
+    )
+  }
 }
 
 export default Notification

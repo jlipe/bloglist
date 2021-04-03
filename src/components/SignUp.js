@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux'
 import { useField } from '../hooks'
 import { addUser } from '../reducers/userReducer'
 
-import { useHistory } from 'react-router-dom'
+import { Container, Form, Button } from 'react-bootstrap'
+
+import { useHistory, Link } from 'react-router-dom'
 
 const SignUp = () => {
   const dispatch = useDispatch()
@@ -21,20 +23,31 @@ const SignUp = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={submitForm}>
-        <h2>Create an account</h2>
-        <div>
-          username
-          <input {...username} />
-        </div>
-        <div>
-          password
-          <input {...password} />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
+    <Container fluid>
+      <h2>Sign Up</h2>
+      <Form onSubmit={submitForm}>
+        <Form.Group controlId="formUsername">
+          <Form.Label>Username:</Form.Label>
+          <Form.Control {...username} placeholder="Enter Username" />
+          <Form.Text className="text-muted">
+            Username must be unique
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control {...password} placeholder="Enter Password" />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Sign Up
+        </Button>
+        <Link to="/login">
+          <Button variant="secondary" className="m-2">
+            Login
+          </Button>
+        </Link>
+      </Form>
+    </Container>
   )
 }
 

@@ -36,7 +36,7 @@ const BlogList = ({ blogs }) => {
 
   return (
     <div>
-      <Button className="m-2" onClick={() => dispatch(sortBlogs())}>Sort Blogs</Button>
+      <Button className="m-2" onClick={() => dispatch(sortBlogs())}>Sort Blogs by Likes</Button>
       <Table striped bordered hover>
         <thead>
           <tr>

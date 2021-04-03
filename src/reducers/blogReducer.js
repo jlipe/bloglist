@@ -52,7 +52,7 @@ export const createBlog = (blog) => {
       data: { blog: addedBlog }
     })
 
-    dispatch(setMessage(`a new blog ${addedBlog.title} by ${addedBlog.author} added`, 3))
+    dispatch(setMessage(`a new blog ${addedBlog.title} by ${addedBlog.author} added`, 'success', 3))
   }
 }
 
@@ -69,13 +69,17 @@ export const vote = (blog) => {
 
 export const deleteBlog = (blog) => {
   return async dispatch => {
-    await blogService.remove(blog.id)
-    dispatch({
-      type: 'REMOVE_BLOG',
-      data: { id: blog.id }
-    })
+    try {
+      const response = await blogService.remove(blog.id)
+      dispatch({
+        type: 'REMOVE_BLOG',
+        data: { id: blog.id }
+      })
 
-    dispatch(setMessage(`${blog.title} successfully removed`, 3))
+      dispatch(setMessage(`${blog.title} successfully removed`, 'success', 3))
+    } catch (e) {
+      dispatch(setMessage('Cannot delete blog', 'danger', 3))
+    }
   }
 }
 

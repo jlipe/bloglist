@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch, Route, Link
 } from 'react-router-dom'
 
+import { Button } from 'react-bootstrap'
+
 import { initializeBlogs, createBlog } from './reducers/blogReducer'
-import { initUser, logoutUser } from './reducers/userReducer'
+import { initUser } from './reducers/userReducer'
 
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
@@ -24,18 +26,19 @@ import './App.css'
 const App = () => {
   const dispatch = useDispatch()
 
+  const blogs = useSelector(state => state.blogs)
+
+  const user = useSelector(state => state.user)
+
   useEffect(() => {
     dispatch(initUser())
   }, [])
+
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [])
 
-
-  const blogs = useSelector(state => state.blogs)
-
-  const user = useSelector(state => state.user)
 
   const blogFormRef = useRef()
 
@@ -69,10 +72,14 @@ const App = () => {
           <Route path="/">
             <div>
               {user ?
-                <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
+                <Togglable buttonLabel={'New Blog'} ref={blogFormRef}>
                   <BlogForm user={user} handleSubmit={handleBlogCreate} />
                 </Togglable>
-                : null
+                : <Link to="/login">
+                  <Button variant="warning" className="ml-2">
+                    Login to add a blog
+                  </Button>
+                </Link>
               }
               <BlogList blogs={blogs} />
             </div>

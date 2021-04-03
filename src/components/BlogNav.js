@@ -19,12 +19,8 @@ const BlogNav = ({ user }) => {
         <Nav>
           { user ?
             <>
-              <Form inline>
-                <Form.Label>
-                  { `${user.username} logged in ` }
-                </Form.Label>
-                <Button onClick={() => dispatch(logoutUser()) }>Log out</Button>
-              </Form>
+              <Navbar.Brand>{`${user.username} logged in`}</Navbar.Brand>
+              <Button onClick={() => dispatch(logoutUser()) }>Log out</Button>
             </>
             : <Nav.Item>
               <Nav.Link as={Link} to='/login'>Login</Nav.Link>
