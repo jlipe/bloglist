@@ -6,6 +6,11 @@ import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
 import userReducer from './reducers/userReducer'
 
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+} else {
+  console.log = function(){}
+}
+
 const reducer = combineReducers({
   message: notificationReducer,
   blogs: blogReducer,
