@@ -30,8 +30,8 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.get('/*', function(req, res) {
-  res.sendFile('build/index.html');
-});
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
