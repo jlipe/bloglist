@@ -8,7 +8,7 @@ import { Button, Container, Form } from 'react-bootstrap'
 
 import { useHistory, Link } from 'react-router-dom'
 
-const loginForm = () => {
+const LoginForm = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -52,4 +52,4 @@ const loginForm = () => {
   )
 }
 
-export default loginForm
+export default LoginForm
